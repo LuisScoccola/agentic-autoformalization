@@ -1,18 +1,18 @@
 from dotenv import load_dotenv
 import os
-from google import genai
 import asyncio
 import aristotlelib
 from pathlib import Path
 
 
-def load_API_keys():
+def load_aristotle_API_key():
     load_dotenv()
-    _ = os.getenv("GEMINI_API_KEY")
     _ = os.getenv("ARISTOTLE_API_KEY")
 
+#    _ = os.getenv("GEMINI_API_KEY")
 
-def inference_gemini(prompt, pro=True):
+def inference_gemini(prompt, pro=True, client=None):
+    from google import genai
     model_name = "gemini-2.5-pro" if pro else "gemini-2.5-flash"
     if not client:
         client = genai.Client()
@@ -69,16 +69,16 @@ async def inference_aristotle(
         print(f"Solution saved to: {solution_path}")
 
 
-def build_query_informal_agent(result_name, location_of_informal_result):
-    return f"""
+def build_query_informal_agent(result_name, location_of_informal_result, location_of_partial_progress=None):
+    query = f"""
     I need you to help me formalize a mathematical result in Lean 4.
     The result is "{result_name}".
     The statement of the result can be found in the following document: {location_of_informal_result}.
 
     This is what I want you to do:
-        - Formalize the statement of the result and the statements of any other results you deem necessary.
+        - Formalize the statement of the result.
         - Do not attempt to formalize the proof of the statements, instead, use the Lean 4 keyword "sorry" for proofs.
-        - Use mathlib, which is a Lean 4 library that already contains many definitions and results. The library mathlib can be found here: https://github.com/leanprover-community/mathlib4
+        - Use mathlib, which is a Lean 4 library that already contains many definitions and results. The library mathlib can be found here: https://github.com/leanprover-community/mathlib4. Make sure any imports you make are compatible with the library structure.
         - The statements should looks as follows:
     ```
     /--
@@ -90,3 +90,36 @@ def build_query_informal_agent(result_name, location_of_informal_result):
     theorem ResultName [Formal statement of the result, which should be filled in by you] := by sorry
     ```
     """
+
+    append = ""
+    if location_of_partial_progress:
+        append = """
+    Also, this result is part of a larger project, which I have started formalizing already.
+
+    Use the following Lean 4 code as a starting point. Do not delete or modify anything in the code, just add any mathlib library imports you may need, and append the formalized result statement that I asked for above.
+
+    LEAN 4 file with partial progress:
+    """
+        with open(location_of_partial_progress, "r") as f:
+            lines = f.readlines()
+            for l in lines:
+                append += l
+
+    return query + append
+
+
+
+import subprocess
+import os
+def inference_claude(filename = "./tmp/instructions.txt"):
+
+    command = f"claude --dangerously-skip-permissions --print 'follow the prompt in {filename}'"
+
+    result = subprocess.run(
+        command,
+        shell=True,
+        capture_output=True,
+        text=True
+    )
+
+    return result.stdout
