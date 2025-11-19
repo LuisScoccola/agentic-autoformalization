@@ -17,22 +17,27 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -s /bin/bash claude && \
     echo "claude ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Switch to non-root user
-USER claude
 
-# Install elan (Lean version manager)
-RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:stable
+# Install Claude Code and Python packages system wide
+RUN npm install -g @anthropic-ai/claude-code
 
-# Add elan to PATH
-ENV PATH="/home/claude/.elan/bin:${PATH}"
+RUN pip3 install --break-system-packages aristotlelib python-dotenv
+
+# Install elan in /opt (accessible to all users)
+RUN curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:stable --no-modify-path
+RUN mv /root/.elan /opt/elan && chmod -R 755 /opt/elan
+
+# Set up environment for elan
+ENV ELAN_HOME="/opt/elan"
+ENV PATH="/opt/elan/bin:${PATH}"
 
 # Verify Lean installation
-RUN lean --version
+RUN lean --version && lake --version
 
-# Install Claude Code and Python packages using system npm
-USER root
-RUN npm install -g @anthropic-ai/claude-code
-RUN pip3 install --break-system-packages aristotlelib python-dotenv
+# Add elan to claude user's PATH in .bashrc
+RUN echo 'export ELAN_HOME="/opt/elan"' >> /home/claude/.bashrc && \
+    echo 'export PATH="/opt/elan/bin:$PATH"' >> /home/claude/.bashrc
+
 USER claude
 
 
