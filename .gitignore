@@ -5,6 +5,7 @@ workspace/**
 !workspace/
 # Don't ignore the specific subdirectory
 !workspace/pythoformalize/
+!workspace/pythoformalize/**
 
 workspace/pythoformalize/__pycache__/**
 

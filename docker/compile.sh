@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t claude-code-lean4 /Users/luisscoccola/code/agentic-lean/docker
+docker build -t agent-container /Users/luisscoccola/code/agentic-lean/docker
