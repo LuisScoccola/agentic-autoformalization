@@ -1,14 +1,9 @@
-from dotenv import load_dotenv
-import os
 import asyncio
 import aristotlelib
 import subprocess
 import os
 
 
-def load_aristotle_API_key():
-    load_dotenv()
-    _ = os.getenv("ARISTOTLE_API_KEY")
 
 async def inference_aristotle(
     lean_project_path,

@@ -13,8 +13,6 @@ with open(tmp_file, "w") as text_file:
 
 inference_claude(tmp_file)
 
-# load_aristotle_API_key()
-#
 # lean_project_path = "./my_lean_project/MyLeanProject/"
 #
 # input_lean_file_path = "TestAristotle.lean"

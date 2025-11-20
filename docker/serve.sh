@@ -1,6 +1,8 @@
 #!/bin/bash
 
 docker run -it \
+  --hostname autoformalization-container \
+  --env-file /Users/luisscoccola/code/agentic-lean/docker/.env \
   -v /Users/luisscoccola/code/agentic-lean/workspace:/workspace \
   -v /Users/luisscoccola/code/agentic-lean/docker/root-directory:/home/claude \
-  claude-code-lean4 \
+  claude-code-lean4

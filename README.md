@@ -14,7 +14,9 @@ You should only need to run the following once.
         - Put the target Lean project here.
         - It's recommended to not have the `.git` files for the project in `workspace`, but rather somewhere else, so that the agents don't have access to those.
     - `./workspace/tmp`
-2. Run `./docker/compile.sh`.
+2. Set up Docker
+    - `./docker/compile.sh`.
+    - Add `.env` to `./docker` with `ARISTOTLE_API_KEY=XXX`
 3. Start the Docker server.
     - Run `./docker/serve.sh`.
     - Build lean project.

@@ -1,2 +1,10 @@
 .env
-workspace/*
+# Ignore everything in workspace
+workspace/**
+# But don't ignore the directory itself (required so the next rule works)
+!workspace/
+# Don't ignore the specific subdirectory
+!workspace/pythoformalize/
+
+workspace/pythoformalize/__pycache__/**
+
