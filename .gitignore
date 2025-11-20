@@ -1,2 +1,2 @@
 .env
-workspace/my_lean_project
+workspace/*

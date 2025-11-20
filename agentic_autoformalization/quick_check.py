@@ -7,7 +7,7 @@ from formal_proof_agent import (
 
 tmp_file = "./workspace/tmp/prompt.txt"
 
-query = skeleton_formalization_query("data/RTAA-1-1.pdf", "my_lean_project", "RTAA-1-1.lean")
+query = skeleton_formalization_query("informal_references/RTAA-1-1.pdf", "lean_project", "RTAA-1-1.lean")
 with open(tmp_file, "w") as text_file:
     text_file.write(query)
 
