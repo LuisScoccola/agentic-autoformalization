@@ -1,1 +1,2 @@
-import quick_check
+import main
+import prompts

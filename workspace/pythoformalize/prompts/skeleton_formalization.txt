@@ -1,0 +1,14 @@
+- What I am doing
+    - I am using Lean 4 to formalize mathematics. I am doing so in the Lean project {location_of_lean_project}.
+
+- What I want you to do
+    - Formalize all the definitions and statements of results that are in the _reference_ {location_of_informal_result}.
+
+- Details you should keep in mind
+    - Do the formalization in a new _target file_ {formalization_file} inside the Lean project folder.
+    - Have one result/definition per result/definition there and name those accordingly.
+    - Do not attempt to formalize proofs; instead, just use Lean's keyword sorry.
+    - Use the mathlib library as a dependency, so do not formalize anything that has already been formalized there. If a result/definition follows easily from something in mathlib, make sure to instantiate it so that it matches exactly the result/definition in the _reference_.
+
+- Your workflow
+    - Edit the _target file_ and make sure it compiles. Iterate looking at error messages if necessary.
