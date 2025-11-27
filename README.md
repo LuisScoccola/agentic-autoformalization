@@ -1,13 +1,12 @@
 # Agentic Autoformalization
 
-> [!NOTE]
-> This is work in progress. Everything is subject to change.
 
-This repository contains a Docker file and Python code implementing a agentic approaches to autoformalization of math in Lean 4.
+This repository contains a Docker file and Python code implementing agentic approaches to autoformalization of math in Lean 4.
+The goal is to try out different approaches and to play around with existing models.
 Docker is used to isolate the agents from the rest of the system, so that they can be given complete freedom to edit files and run other commands.
 
-I am using this to play around with existing models in combination with my own approaches.
-
+> [!NOTE]
+> This work is exploratory in nature. Everything is subject to change.
 
 > [!WARNING]
 > Allowing agents (or any other software) to run commands on your computer is always a security risk. Make sure you understand what you are doing before you do it.
