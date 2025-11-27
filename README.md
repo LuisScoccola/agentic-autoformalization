@@ -3,7 +3,7 @@
 > [!NOTE]  
 > This is work in progress. Everything is subject to change.
 
-This repository essentially contains a Docker file and Python code implementing an agentic approach to autoformalization of math in Lean 4.
+This repository contains a Docker file and Python code implementing an agentic approach to autoformalization of math in Lean 4.
 Docker is used to isolate the agents from the rest of the system, so that they can be given complete freedom to edit files and run other commands.
 
 ## Installation
