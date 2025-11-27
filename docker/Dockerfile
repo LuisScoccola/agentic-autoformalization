@@ -21,7 +21,7 @@ RUN useradd -m -s /bin/bash agent && \
 # Install Claude Code and Python packages system wide
 RUN npm install -g @anthropic-ai/claude-code
 
-RUN pip3 install --break-system-packages aristotlelib python-dotenv leanclient
+RUN pip3 install --break-system-packages --upgrade aristotlelib python-dotenv leanclient
 
 ## Install elan in /opt (accessible to all users)
 RUN curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:stable --no-modify-path

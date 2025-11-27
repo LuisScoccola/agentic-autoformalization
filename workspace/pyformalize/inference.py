@@ -2,6 +2,7 @@ import asyncio
 import aristotlelib
 import subprocess
 import os
+import tempfile
 
 
 async def inference_aristotle(
@@ -50,27 +51,20 @@ async def inference_aristotle(
         print(f"Solution saved to: {solution_path}")
 
 
-def inference_claude(prompt_file):
+def inference_claude(prompt_text):
+    # Save to temporary file created in current path and set prompt_file to that file
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".txt", delete=False, dir="/workspace/tmp"
+    ) as tmp:
+        tmp.write(prompt_text)
+        prompt_file = tmp.name
+
     command = f"claude --dangerously-skip-permissions --print 'Follow the prompt in {prompt_file}.'"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+    os.remove(prompt_file)
+
     return result.stdout
-
-
-# def inference_claude(prompt_file):
-#    command = f"claude --dangerously-skip-permissions --print 'Follow the prompt in {prompt_file}.'"
-#    process = subprocess.Popen(
-#        command,
-#        shell=True,
-#        stdout=subprocess.PIPE,
-#        stderr=subprocess.STDOUT,
-#        text=True
-#    )
-#
-#    # Stream output line-by-line
-#    for line in process.stdout:
-#        print(line, end="")  # print as it arrives
-#
-#    process.wait()
 
 
 def inference_gemini(prompt, pro=True, client=None):
@@ -84,3 +78,15 @@ def inference_gemini(prompt, pro=True, client=None):
         contents=prompt,
     )
     return response.text
+
+
+# Not used. For our purposes, Claude works better.
+def inference_deepseek_ocr(input_file, output_file):
+    url = "https://api.alphaxiv.org/models/v1/deepseek/deepseek-ocr/inference"
+
+    # Build the curl command
+    cmd = ["curl", "-X", "POST", url, "-F", f"file=@{input_file}"]
+
+    # Run curl and redirect stdout to output file
+    with open(output_file, "w") as out:
+        subprocess.run(cmd, stdout=out, check=True)

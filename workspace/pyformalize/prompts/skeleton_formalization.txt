@@ -3,12 +3,24 @@
 
 - What I want you to do
     - Formalize all the definitions and statements of results that are in the _reference_ {location_of_informal_result}.
+    - Before each statement of a result, add a comment containing an informal proof of the result.
+
+- Each statement of a result should look as follows:
+/--
+    [Informal description of the statement, which should be filled in by you]
+
+    PROVIDED SOLUTION:
+    [Informal proof of the statement, which can be taken from _reference_ and which should be filled in by you]
+-/
+theorem ResultName [Formal statement of the result, which should be filled in by you] := by sorry
 
 - Details you should keep in mind
     - Do the formalization in a new _target file_ {formalization_file} inside the Lean project folder.
     - Have one result/definition per result/definition there and name those accordingly.
+    - If there are results/definitions that are required but are not in an environment in the _reference_ still have a restul/definition in the _target file_.
     - Do not attempt to formalize proofs; instead, just use Lean's keyword sorry.
     - Use the mathlib library as a dependency, so do not formalize anything that has already been formalized there. If a result/definition follows easily from something in mathlib, make sure to instantiate it so that it matches exactly the result/definition in the _reference_.
 
 - Your workflow
-    - Edit the _target file_ and make sure it compiles. Iterate looking at error messages if necessary.
+    - Edit the _target file_ and make sure it compiles.
+    - Iterate using error messages if necessary.
