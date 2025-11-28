@@ -24,7 +24,7 @@ You should only need to run the following once.
         - It's recommended to not have the `.git` files for the project in `workspace` (so that agents don't have access to those).
         This can be done with the same git commands that people use to track their dotfiles, see, eg, [this tutorial](https://www.atlassian.com/git/tutorials/dotfiles).
 2. Set up Docker.
-    - Build the Docker image `./docker/compile.sh`.
+    - Build the Docker image `./docker/build.sh`.
     - Create a file `./docker/.env` with API keys such as `ARISTOTLE_API_KEY`.
 3. Start the Docker server and log into Claude code.
     - From the root of this repository, run `./docker/serve.sh`.
