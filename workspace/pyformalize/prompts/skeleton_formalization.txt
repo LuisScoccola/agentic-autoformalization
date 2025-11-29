@@ -1,5 +1,4 @@
-- What I am doing
-    - I am using Lean 4 to formalize mathematics. I am doing so in the Lean project {location_of_lean_project}.
+- I am using Lean 4 to formalize mathematics in the Lean project {location_of_lean_project}.
 
 - What I want you to do
     - Formalize all the definitions and statements of results that are in the _reference_ {location_of_informal_result}.

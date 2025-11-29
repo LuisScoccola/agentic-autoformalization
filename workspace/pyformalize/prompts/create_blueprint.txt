@@ -1,0 +1,15 @@
+- Context
+    - Math written in English consists of a series of definitions, statements, and proofs.
+        - Examples of statements are the statement of a lemma, the statement of a proposition, and the statement of a theorem.
+        - Some definition might be given inside a paragraph, without a definition environment, but these are still definitions.
+
+- The REFERENCE is the file {location_of_informal_result}. The REFERENCE contains math written in English.
+- The TARGET is the file {location_of_blueprint}.
+
+- What I want you to do
+    - For each definition in the REFERENCE, write
+<DEFINITION> [the definition as it appears in the REFERENCE] <ENDDEFINITION>
+    - For each statement in the REFERENCE, write
+<THEOREM> [the statement as it appears in the REFERENCE] 
+<PROOF> [the proof of the statement as it appears in the REFERENCE. leave blank if no proof is provided] <ENDTHEOREM>
+    - Do this in the same order as in the REFERENCE.

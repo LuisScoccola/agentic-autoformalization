@@ -1,3 +1,3 @@
-- Convert the PDF {location_pdf} to markdown and save it here: {location_output_md}.
-
-- Make sure any math is formatted correctly using LaTex.
+- Convert the PDF {location_pdf} to markdown and save it as {location_output_md}.
+- If the target file exists, overwrite it.
+- Make sure all math is formatted correctly using LaTex.
