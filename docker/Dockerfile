@@ -3,23 +3,32 @@ FROM ubuntu:24.04
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
+    sudo \
+    ca-certificates \
+    gnupg \
+    lsb-release \
     git \
     python3 \
     python3-pip \
-    nodejs \
-    npm \
     wget \
     ripgrep \
     tmux \
-    sudo \
     && rm -rf /var/lib/apt/lists/*
+
+# Add NodeSource Node 20 repository
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
 
 # Create a non-root user
 RUN useradd -m -s /bin/bash agent && \
     echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Install Claude Code and Python packages system wide
+# Install claude code, gemini-cli, and Python packages system wide
 RUN npm install -g @anthropic-ai/claude-code
+
+RUN npm install -g @google/gemini-cli
 
 RUN pip3 install --break-system-packages --upgrade aristotlelib python-dotenv leanclient
 

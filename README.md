@@ -26,7 +26,7 @@ You should only need to run the following once.
 2. Set up Docker.
     - Build the Docker image `./docker/build.sh`.
     - Create a file `./docker/.env` with API keys such as `ARISTOTLE_API_KEY`.
-3. Start the Docker server and log into Claude code.
+3. Start the Docker server, build Lean project, log into claude code, install Lean tools, log into gemini-cli.
     - From the root of this repository, run `./docker/serve.sh`.
     - Build lean project.
         - Go to `workspace/lean_project`.
@@ -35,9 +35,11 @@ You should only need to run the following once.
         - Run `lake build`.
     - Install [lean-lsp-mcp](https://github.com/oOo0oOo/lean-lsp-mcp).
         - Run `claude mcp add lean-lsp uvx lean-lsp-mcp`.
-    - Log into Claude and install Lean 4 skills.
+    - Log into claude code and install Lean 4 skills.
         - From within that session, run `claude` and authenticate.
         - Follow installation instructions for Lean 4 skills [here](https://github.com/cameronfreer/lean4-skills/blob/main/INSTALLATION.md).
+    - Log into gemini-cli.
+        - Run `gemini` and authenticate.
     - Close the session.
 
 ## License
