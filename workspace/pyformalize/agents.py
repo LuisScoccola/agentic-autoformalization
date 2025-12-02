@@ -1,22 +1,89 @@
 from pathlib import Path
 import asyncio
-from external_agents import (
+from .external_agents import (
     claude,
     aristotle,
 )
+import os
+
+PROMPT_DIR = Path(__file__).parent / "prompts"
 
 
-class Agent:
-    def __init__(self, location_workspace):
-        self._location_workspace = Path(location_workspace)
+class Formalizer:
+
+    def __init__(self, workspace, lean_project_name):
+        self._workspace = Path(workspace)
+        self._lean_project = (
+            self._workspace / Path("lean_project") / Path(lean_project_name)
+        )
+
+    def formalize(self, filename, verbose=False):
+
+        workspace = self._workspace
+        pdf = workspace / Path("informal_references") / Path(filename + ".pdf")
+        md = workspace / Path("informal_references") / Path(filename + ".md")
+        # blueprint = "informal_references/KrullSchmidt_blueprint.md"
+        lean_project = self._lean_project
+        skeleton_formalization_file = lean_project / Path(filename + "Skeleton.lean")
+        formalization_file = lean_project / Path(filename + ".lean")
+
+        log = []
+
+        if not os.path.exists(str(md)):
+            if verbose:
+                print("Converting...")
+            converter = PdfMdConverter()
+            converter.convert(pdf, md, log=log)
+        else:
+            if verbose:
+                print(str(md), "exists. No need to convert.")
+
+        # if build_blueprint:
+        #    if verbose:
+        #        print("Building blueprint...")
+        #    blueprint_builder = BlueprintBuilder(workspace)
+        #    blueprint_builder.build(md, blueprint, log=log)
+        # to_formalize = parse_blueprint_from_file()
+
+        if not os.path.exists(str(skeleton_formalization_file)):
+            if verbose:
+                print("Formalizing skeleton...")
+            skeleton_formalizer = SkeletonFormalizer()
+            skeleton_formalizer.formalize(
+                md, lean_project, skeleton_formalization_file, log=log
+            )
+        else:
+            if verbose:
+                print(
+                    str(skeleton_formalization_file),
+                    "exists. No need to formalize skeleton.",
+                )
+
+        if not os.path.exists(str(formalization_file)):
+            if verbose:
+                print("Filling sorry...")
+            sorry_filler = SorryFiller()
+            sorry_filler.fill(
+                skeleton_formalization_file,
+                lean_project,
+                formalization_file,
+                verbose=verbose,
+                log=log,
+            )
+        else:
+            if verbose:
+                print(str(formalization_file), "exists. No need to fill sorry.")
+
+        return log
 
 
-class PdfMdConverter(Agent):
+class PdfMdConverter:
+
+    def __init__(self):
+        pass
 
     def convert(self, pdf, md, log=None):
-        location_pdf = self._location_workspace / Path(pdf)
-        location_md = self._location_workspace / Path(md)
-        prompt = self._prompt_pdf_to_md(location_pdf, location_md)
+        prompt = self._prompt_pdf_to_md(pdf, md)
         if log:
             log.append("PdfMdConverter")
         return claude(prompt, log=log)
@@ -26,16 +93,19 @@ class PdfMdConverter(Agent):
         location_pdf,
         location_output_md,
     ):
-        template_path: str = "./prompts/pdf_to_md.txt"
+        template_path = PROMPT_DIR / "pdf_to_md.txt"
         template_text = Path(template_path).read_text()
 
         return template_text.format(
-            location_pdf=str(location_pdf),
-            location_output_md=str(location_output_md),
+            location_pdf=location_pdf,
+            location_output_md=location_output_md,
         )
 
 
-class BlueprintBuilder(Agent):
+class BlueprintBuilder:
+
+    def __init__(self):
+        pass
 
     def build(
         self,
@@ -43,13 +113,9 @@ class BlueprintBuilder(Agent):
         blueprint,
         log=None,
     ):
-
-        location_of_informal_result = self._location_workspace / Path(informal_result)
-        location_of_blueprint = self._location_workspace / Path(blueprint)
-
         prompt = self._prompt_blueprint(
-            str(location_of_informal_result),
-            str(location_of_blueprint),
+            informal_result,
+            blueprint,
         )
         if log:
             log.append("BlueprintBuilder")
@@ -60,7 +126,7 @@ class BlueprintBuilder(Agent):
         location_of_informal_result,
         location_of_blueprint,
     ) -> str:
-        template_path: str = "./prompts/create_blueprint.txt"
+        template_path = PROMPT_DIR / "create_blueprint.txt"
         template_text = Path(template_path).read_text()
 
         return template_text.format(
@@ -69,7 +135,10 @@ class BlueprintBuilder(Agent):
         )
 
 
-class SkeletonFormalizer(Agent):
+class SkeletonFormalizer:
+
+    def __init__(self):
+        pass
 
     def formalize(
         self,
@@ -79,16 +148,10 @@ class SkeletonFormalizer(Agent):
         log=None,
     ):
 
-        location_of_informal_result = self._location_workspace / Path(informal_result)
-        location_of_lean_project = self._location_workspace / Path(lean_project)
-        location_formalization_file = location_of_lean_project / Path(
-            skeleton_formalization
-        )
-
         prompt = self._prompt_skeleton_formalization(
-            str(location_of_informal_result),
-            str(location_of_lean_project),
-            str(location_formalization_file),
+            informal_result,
+            lean_project,
+            skeleton_formalization,
         )
         if log:
             log.append("SkeletonFormalizer")
@@ -100,8 +163,8 @@ class SkeletonFormalizer(Agent):
         location_of_lean_project: str,
         formalization_file: str,
     ) -> str:
-        header_path: str = "./prompts/header.txt"
-        template_path: str = "./prompts/skeleton_formalization.txt"
+        header_path = PROMPT_DIR / "header.txt"
+        template_path = PROMPT_DIR / "skeleton_formalization.txt"
         header_text = Path(header_path).read_text()
         template_text = Path(template_path).read_text()
 
@@ -112,31 +175,26 @@ class SkeletonFormalizer(Agent):
         )
 
 
-class SorryFiller(Agent):
+class SorryFiller:
+
+    def __init__(self):
+        pass
 
     def fill(
         self,
         skeleton_formalization_file,
-        lean_project,
         output_file,
         verbose=False,
         log=None,
     ):
-
-        location_of_lean_project = self._location_workspace / Path(lean_project)
-        location_skeleton_formalization_file = location_of_lean_project / Path(
-            skeleton_formalization_file
-        )
-        location_output_file = location_of_lean_project / Path(output_file)
 
         if log:
             log.append("SorryFiller")
 
         return asyncio.run(
             aristotle(
-                str(location_of_lean_project),
-                input_lean_file_path=str(location_skeleton_formalization_file),
-                output_lean_file_path=str(location_output_file),
+                input_lean_file_path=skeleton_formalization_file,
+                output_lean_file_path=output_file,
                 verbose=verbose,
             )
         )

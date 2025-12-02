@@ -1,2 +1,1 @@
-import main
-import agents
+from .agents import Formalizer
