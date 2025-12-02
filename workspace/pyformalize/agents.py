@@ -65,7 +65,6 @@ class Formalizer:
             sorry_filler = SorryFiller()
             sorry_filler.fill(
                 skeleton_formalization_file,
-                lean_project,
                 formalization_file,
                 verbose=verbose,
                 log=log,
