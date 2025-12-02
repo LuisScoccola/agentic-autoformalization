@@ -10,6 +10,16 @@ PROMPT_DIR = Path(__file__).parent / "prompts"
 
 
 class Formalizer:
+    """
+    Coordinates a PDF-to-Lean formalization pipeline.
+
+    Parameters
+    ----------
+    workspace : str
+        Path to a directory containing `informal_references/` and a `lean_project/`.
+    lean_project_name : str
+        Name of the Lean project subdirectory inside `workspace/lean_project/`.
+    """
 
     def __init__(self, workspace, lean_project_name):
         self._workspace = Path(workspace)
@@ -18,6 +28,25 @@ class Formalizer:
         )
 
     def formalize(self, filename, verbose=False):
+        """
+        Executes the formalization pipeline for the given base filename.
+        Returns a log (list of messages) describing the steps performed.
+        The pipeline generates intermediate files, and skips steps for which the intermediate files exist.
+
+        Parameters
+        ----------
+        filename : str
+            Base name (without extension) of the reference to formalize.
+            It expects a file `informal_references/{filename}.pdf` with the informal math.
+
+        verbose : bool, optional
+            If True, print progress information during the process.
+
+        Returns
+        -------
+        list[str]
+            Messages describing the steps executed during formalization.
+        """
 
         workspace = self._workspace
         pdf = workspace / Path("informal_references") / Path(filename + ".pdf")
