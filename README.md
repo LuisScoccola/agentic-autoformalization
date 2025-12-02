@@ -42,6 +42,10 @@ You should only need to run the following once.
         - Run `gemini` and authenticate.
     - Close the session.
 
+## Usage
+
+From the root of this repository, run `./docker/run.sh`, and use the `pyformalize` Python package as in `workspace/example.py`.
+
 ## License
 
 This software is published under the 3-clause BSD license.
