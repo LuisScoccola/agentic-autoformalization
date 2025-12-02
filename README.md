@@ -18,10 +18,10 @@ You should only need to run the following once.
 1. Create directories for Lean project and informal references.
     - Create `./workspace/tmp`
     - Create `./workspace/informal_references`
-        - Here you'll put informal math in PDF or markdown.
+        - Here you'll put informal math in PDF.
     - Create `./workspace/lean_project`
         - Put the target Lean project here.
-        - It's recommended to not have the `.git` files for the project in `workspace` (so that agents don't have access to those).
+        - It's recommended to not have the `.git` files for the project in `workspace` (so that agents don't have access to them).
         This can be done with the same git commands that people use to track their dotfiles, see, eg, [this tutorial](https://www.atlassian.com/git/tutorials/dotfiles).
 2. Set up Docker.
     - Build the Docker image `./docker/build.sh`.
