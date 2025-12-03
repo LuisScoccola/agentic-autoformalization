@@ -1,3 +1,4 @@
+from pathlib import Path
 import asyncio
 import aristotlelib
 import subprocess
@@ -5,6 +6,8 @@ import os
 import tempfile
 from datetime import datetime
 
+
+TMP_DIR = Path(__file__).parent.parent / "tmp"
 
 async def aristotle(
     input_lean_content=None,
@@ -59,14 +62,14 @@ async def aristotle(
 
 def claude(prompt_text, model="claude-sonnet-4-5", output=False, log=None):
     with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".txt", delete=False, dir="/workspace/pyformalize/tmp"
+        mode="w", suffix=".txt", delete=False, dir=TMP_DIR
     ) as tmp:
         tmp.write(prompt_text)
         prompt_file = tmp.name
 
     if output:
         with tempfile.NamedTemporaryFile(
-            mode="r", suffix=".txt", delete=False, dir="/workspace/pyformalize/tmp"
+            mode="r", suffix=".txt", delete=False, dir=TMP_DIR
         ) as tmp:
             output_file = tmp.name
 
@@ -95,14 +98,14 @@ def claude(prompt_text, model="claude-sonnet-4-5", output=False, log=None):
 
 def gemini(prompt_text, model="gemini-2.5-pro", output=False, log=None):
     with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".txt", delete=False, dir="/workspace/pyformalize/tmp"
+        mode="w", suffix=".txt", delete=False, dir=TMP_DIR
     ) as tmp:
         tmp.write(prompt_text)
         prompt_file = tmp.name
 
     if output:
         with tempfile.NamedTemporaryFile(
-            mode="r", suffix=".txt", delete=False, dir="/workspace/pyformalize/tmp"
+            mode="r", suffix=".txt", delete=False, dir=TMP_DIR
         ) as tmp:
             output_file = tmp.name
 

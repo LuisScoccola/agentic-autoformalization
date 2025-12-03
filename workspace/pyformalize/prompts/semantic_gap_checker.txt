@@ -1,0 +1,11 @@
+- I am using Lean 4 to formalize mathematics in the Lean project {location_of_lean_project}.
+
+- I have formalized all the definitions and statements of results that are in the _reference_ {location_of_informal_result}.
+- I have done so in the _target file_ {formalization_file}.
+- However, I am not sure if my formalization is correct, in the sense that the Lean code in the _target file_ might not reflect the actual meaning of the math in the _reference_.
+
+- Go over the _target file_ and add comments about any definition or statement that you think has not been formalized correctly. Give enough details so that an agent can correct any potential issues.
+- Do not give stylistic comments, only point out things that you believe are actually wrong.
+- Any comments that you add should contain be preceeded by the keyword SEMANTICGAP.
+
+- Your OUTPUT should be the string 1 if there is something to correct, and the string 0 if there isn't anything to correct.

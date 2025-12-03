@@ -16,7 +16,7 @@ theorem ResultName [Formal statement of the result, which should be filled in by
 - Details you should keep in mind
     - Do the formalization in a new _target file_ {formalization_file} inside the Lean project folder.
     - Have one result/definition per result/definition there and name those accordingly.
-    - If there are results/definitions that are required but are not in an environment in the _reference_ still have a restul/definition in the _target file_.
+    - If there are results/definitions that are required but are not in an environment in the _reference_ still have a result/definition in the _target file_.
     - Do not attempt to formalize proofs; instead, just use Lean's keyword sorry.
     - Use the mathlib library as a dependency, so do not formalize anything that has already been formalized there. If a result/definition follows easily from something in mathlib, make sure to instantiate it so that it matches exactly the result/definition in the _reference_.
 

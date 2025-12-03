@@ -27,7 +27,7 @@ class Formalizer:
             self._workspace / Path("lean_project") / Path(lean_project_name)
         )
 
-    def formalize(self, filename, verbose=False):
+    def formalize(self, filename, check_for_semantic_gap_and_fix=0, verbose=False):
         """
         Executes the formalization pipeline for the given base filename.
         Returns a log (list of messages) describing the steps performed.
@@ -88,19 +88,32 @@ class Formalizer:
                     "exists. No need to formalize skeleton.",
                 )
 
-        if not os.path.exists(str(formalization_file)):
-            if verbose:
-                print("Filling sorry...")
-            sorry_filler = SorryFiller()
-            sorry_filler.fill(
-                skeleton_formalization_file,
-                formalization_file,
-                verbose=verbose,
-                log=log,
+        if verbose:
+            print("Checking for semantic gaps...")
+
+        fix_rounds_left = check_for_semantic_gap_and_fix
+        while fix_rounds_left:
+            semantic_gap_checker = SemanticGapChecker()
+            semantic_gap = semantic_gap_checker.check(
+                md, lean_project, skeleton_formalization_file, log=log
             )
-        else:
-            if verbose:
-                print(str(formalization_file), "exists. No need to fill sorry.")
+            if not semantic_gap:
+                break
+            semantic_gap_fixer = SemanticGapFixer()
+            semantic_gap_fixer.fix(
+                md, lean_project, skeleton_formalization_file, log=log
+            )
+            fix_rounds_left -= 1
+
+        if verbose:
+            print("Filling sorry...")
+        sorry_filler = SorryFiller()
+        sorry_filler.fill(
+            skeleton_formalization_file,
+            formalization_file,
+            verbose=verbose,
+            log=log,
+        )
 
         return log
 
@@ -187,10 +200,10 @@ class SkeletonFormalizer:
 
     @staticmethod
     def _prompt_skeleton_formalization(
-        location_of_informal_result: str,
-        location_of_lean_project: str,
-        formalization_file: str,
-    ) -> str:
+        location_of_informal_result,
+        location_of_lean_project,
+        formalization_file,
+    ):
         header_path = PROMPT_DIR / "header.txt"
         template_path = PROMPT_DIR / "skeleton_formalization.txt"
         header_text = Path(header_path).read_text()
@@ -201,6 +214,85 @@ class SkeletonFormalizer:
             location_of_lean_project=location_of_lean_project,
             formalization_file=formalization_file,
         )
+
+
+class SemanticGapChecker:
+
+    def __init__(self):
+        pass
+
+    def check(
+        self,
+        informal_result,
+        lean_project,
+        skeleton_formalization,
+        log=None,
+    ):
+
+        prompt = self._prompt_semantic_gap_checker(
+            informal_result,
+            lean_project,
+            skeleton_formalization,
+        )
+        if log:
+            log.append("SemanticGapChecker")
+        out = claude(prompt, output=True, log=log)
+        print(out)
+        return out == "1"
+
+    @staticmethod
+    def _prompt_semantic_gap_checker(
+        location_of_informal_result,
+        location_of_lean_project,
+        formalization_file,
+    ):
+        template_path = PROMPT_DIR / "semantic_gap_checker.txt"
+        template_text = Path(template_path).read_text()
+
+        return template_text.format(
+            location_of_informal_result=location_of_informal_result,
+            location_of_lean_project=location_of_lean_project,
+            formalization_file=formalization_file,
+        )
+
+class SemanticGapFixer:
+
+    def __init__(self):
+        pass
+
+    def fix(
+        self,
+        informal_result,
+        lean_project,
+        skeleton_formalization,
+        log=None,
+    ):
+
+        prompt = self._prompt_semantic_gap_fixer(
+            informal_result,
+            lean_project,
+            skeleton_formalization,
+        )
+        if log:
+            log.append("SemanticGapFixer")
+        return claude(prompt, log=log)
+
+    @staticmethod
+    def _prompt_semantic_gap_fixer(
+        location_of_informal_result,
+        location_of_lean_project,
+        formalization_file,
+    ):
+        template_path = PROMPT_DIR / "semantic_gap_fixer.txt"
+        template_text = Path(template_path).read_text()
+
+        return template_text.format(
+            location_of_informal_result=location_of_informal_result,
+            location_of_lean_project=location_of_lean_project,
+            formalization_file=formalization_file,
+        )
+
+
 
 
 class SorryFiller:
