@@ -39,6 +39,10 @@ class Formalizer:
             Base name (without extension) of the reference to formalize.
             It expects a file `informal_references/{filename}.pdf` with the informal math.
 
+        check_for_semantic_gap_and_fix : int
+            How many iterations of checking that formalization matches informal reference and fixing if necessary.
+            Default is 0.
+
         verbose : bool, optional
             If True, print progress information during the process.
 
