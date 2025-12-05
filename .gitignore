@@ -7,7 +7,7 @@ workspace/**
 # Don't ignore the specific subdirectory
 !workspace/pyformalize/
 !workspace/pyformalize/**
-!workspace/example.py
+!workspace/example.sh
 
 workspace/pyformalize/__pycache__/**
 

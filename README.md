@@ -44,7 +44,7 @@ You should only need to run the following once.
 
 ## Usage
 
-From the root of this repository, run `./docker/run.sh`, and use the `pyformalize` Python package as in `workspace/example.py`.
+From the root of this repository, run `./docker/run.sh`, and use the `pyformalize` Python package as in `workspace/example.sh`.
 
 ## License
 

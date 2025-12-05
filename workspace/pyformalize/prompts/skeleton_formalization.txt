@@ -18,7 +18,10 @@ theorem ResultName [Formal statement of the result, which should be filled in by
     - Have one result/definition per result/definition there and name those accordingly.
     - If there are results/definitions that are required but are not in an environment in the _reference_ still have a result/definition in the _target file_.
     - Do not attempt to formalize proofs; instead, just use Lean's keyword sorry.
-    - Use the mathlib library as a dependency, so do not formalize anything that has already been formalized there. If a result/definition follows easily from something in mathlib, make sure to instantiate it so that it matches exactly the result/definition in the _reference_.
+    - Do completely formalize all definitions, and do not use Lean's keyword sorry for definitions.
+    - Use the mathlib library as a dependency.
+        - If a result/definition follows easily from something in mathlib, use the mathlib result/definition and instantiate it to the case we care about, so that it matches exactly the result/definition in the _reference_.
+        - Use Lean Finder to locate relevant results/definitions in the mathlib library.
 
 - Your workflow
     - Edit the _target file_ and make sure it compiles.

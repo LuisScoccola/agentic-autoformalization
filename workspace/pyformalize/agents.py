@@ -94,7 +94,6 @@ class Formalizer:
 
         if verbose:
             print("Checking for semantic gaps...")
-
         fix_rounds_left = check_for_semantic_gap_and_fix
         while fix_rounds_left:
             semantic_gap_checker = SemanticGapChecker()
@@ -241,7 +240,6 @@ class SemanticGapChecker:
         if log:
             log.append("SemanticGapChecker")
         out = claude(prompt, output=True, log=log)
-        print(out)
         return out == "1"
 
     @staticmethod
